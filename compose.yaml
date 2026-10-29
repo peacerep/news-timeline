@@ -1,0 +1,85 @@
+services:
+  site:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./output:/usr/share/nginx/html/downloads:ro
+
+  check:
+    image: node:lts-alpine
+    profiles: [check]
+    working_dir: /work
+    volumes:
+      - .:/work:ro
+    command: ["node", "--check", "assets/app.js"]
+
+  browser-check:
+    build:
+      context: .
+      dockerfile: Dockerfile.browser-check
+    profiles: [check]
+    working_dir: /work
+    volumes:
+      - .:/work
+    command: ["python", "scripts/browser_check.py"]
+
+  compendium:
+    build:
+      context: .
+      dockerfile: Dockerfile.browser-check
+    profiles: [compendium]
+    working_dir: /work
+    volumes:
+      - .:/work
+      - ../PeaceRep Publications Library:/reference:ro
+    command: ["python", "scripts/build_compendia.py"]
+
+  pages-build:
+    image: python:3.12-alpine
+    profiles: [pages]
+    working_dir: /work
+    volumes:
+      - .:/work
+    command: ["python", "scripts/build_pages.py"]
+
+  pages-preview:
+    image: nginx:stable-alpine
+    profiles: [pages]
+    volumes:
+      - ./pages-dist:/usr/share/nginx/html/news-timeline:ro
+    ports:
+      - "8081:80"
+
+  pages-check:
+    build:
+      context: .
+      dockerfile: Dockerfile.browser-check
+    profiles: [pages]
+    working_dir: /work
+    volumes:
+      - .:/work:ro
+    depends_on:
+      - pages-preview
+    command: ["python", "scripts/pages_check.py"]
+
+  export:
+    image: python:3.12-alpine
+    profiles: [export]
+    working_dir: /work
+    volumes:
+      - .:/work
+      - ${NEWS_CAPTURE_DIR:-../data/news_pilot/20261028T165947Z}:/input/capture:ro
+      - ${NEWS_PROPOSAL_FILE:-../data/news_classification/proposals_20261028T165947Z_v5.csv}:/input/proposal.csv:ro
+    command: ["python", "scripts/export_news.py", "--records", "/input/capture/records.json", "--proposal", "/input/proposal.csv"]
+
+  recode:
+    image: python:3.12-alpine
+    profiles: [editorial]
+    working_dir: /work
+    volumes:
+      - .:/work
+      - ../data/news_classification:/classification
+      - ../docs/NEWS_CLASSIFICATION_GUIDE_2026-10-28.md:/input/guide.md:ro
+      - ../docs/IMPACT_PAGE_NEWS_CROSSWALK_2026-10-29.md:/input/impact-crosswalk.md:ro
+    command: ["python", "scripts/recode_responses_v5.py"]

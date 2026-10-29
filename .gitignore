@@ -1,0 +1,8 @@
+pages-dist/
+output/images/
+output/*.html
+editorial/*.csv
+editorial/*.md
+/*.png
+__pycache__/
+*.pyc

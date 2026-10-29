@@ -1,0 +1,2 @@
+FROM mcr.microsoft.com/playwright/python:v1.63.0-noble
+RUN python -m pip install --no-cache-dir playwright==1.63.0 Pillow==11.3.0 pymupdf==1.26.7

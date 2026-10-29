@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore PeaceRep news and research stories over time.">
+  <title>PeaceRep news and impact</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#results">Skip to stories</a>
+  <header class="site-header" id="top">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="PeaceRep, back to top"><img src="assets/brand/peacerep-logo.png" alt="PeaceRep" width="190" height="60"></a>
+      <div class="header-title"><p class="eyebrow">News / timeline</p><h1>PeaceRep news <em>and impact.</em></h1></div>
+      <p class="header-intro">Research, events and partnerships over time, alongside stories of how PeaceRep's work is used.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="controls" aria-label="Explore stories">
+      <div class="utility-row">
+        <p id="result-count" role="status" aria-live="polite"></p>
+        <div class="download-actions" aria-label="Download PDF reports">
+          <a class="download-link" href="downloads/peacerep-news-summary.pdf" download>News summary PDF</a>
+          <a class="download-link" href="downloads/peacerep-news-by-year.pdf" download>By year PDF</a>
+          <a class="download-link" href="downloads/peacerep-news-by-story-type.pdf" download>By story type PDF</a>
+          <button id="print" type="button">Print current view</button>
+        </div>
+      </div>
+      <div class="toolbar-main">
+        <div class="search-group"><label class="search-label" for="search">Search stories</label><input id="search" type="search" placeholder="Search topics and stories" autocomplete="off"></div>
+        <label class="year-filter" for="year">Year <select id="year"><option value="all">All years</option></select></label>
+      </div>
+      <div class="toolbar-filters">
+        <div class="filter-group"><p class="legend-hint">Story type · Hover to see matching dots</p><div id="type-filters" class="type-filters" role="group" aria-label="Filter by story type and dot colour"></div></div>
+      </div>
+    </section>
+    <section id="results" aria-label="News timeline">
+      <div id="timeline-shell" class="timeline-shell">
+        <div id="timeline-rail" class="timeline-rail" aria-label="Timeline dates">
+          <div class="rail-title">Explore by date <span>Click a dot to find its story</span></div>
+          <div id="rail-axis" class="rail-axis"></div>
+          <div id="rail-dots" class="rail-dots"></div>
+        </div>
+        <svg id="connections" class="connections" aria-hidden="true"></svg>
+        <div id="timeline" class="timeline" tabindex="0" aria-label="Stories in date order"></div>
+      </div>
+      <p id="empty" class="empty" hidden>No stories match these filters.</p>
+    </section>
+  </main>
+  <footer id="about"><p>PeaceRep News · Dates reflect publication dates. Story types are subject to editorial review.</p></footer>
+</body>
+</html>
